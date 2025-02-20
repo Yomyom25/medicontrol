@@ -1,4 +1,4 @@
-<?php 
+<?php
 if (isset($_SESSION["autentificado"]) && $_SESSION["autentificado"] === "SI") {
     header("Location: principal.php");
     exit();

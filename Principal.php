@@ -1,3 +1,6 @@
+<?php include 'header.php';?>
+<?php include 'barra_lateral.php';?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
