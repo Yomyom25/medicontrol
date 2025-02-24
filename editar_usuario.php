@@ -1,6 +1,8 @@
 
 <?php require 'utils/seguridad.php';?>
 <?php require "utils/conexion.php";?>
+<?php include 'header.php';?>
+<?php include 'barra_lateral.php';?>
 
 <!DOCTYPE html>
 <html lang="es">
