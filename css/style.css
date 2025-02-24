@@ -1,3 +1,7 @@
+@import url('header.css');
+@import url('barra_lateral.css');
+@import url('main-content.css');
+
 /* estilos generales */
 body {
     font-family: Arial, sans-serif;

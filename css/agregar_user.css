@@ -1,0 +1,134 @@
+
+:root{
+  --color1: #ad4328;
+  --color2hover: #ff3c0b;
+  --color2: #af941a;
+  --color2hover: #f5b70d;
+  --colorRegistro: #aaa22b;
+  --colorRegistroHover: #4d6421;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: white;
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+
+.dashboard-container {
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  width: 100%;
+  max-width: 700px;
+  margin: 80px auto; /* Centra el contenedor y añade margen */
+}
+
+.login-form h2 {
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.form-group {
+  margin-bottom: 15px;
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  color: #555;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.iniciar {
+  width: 100%;
+  padding: 8px;
+  background-color: var(--color1);
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.crear_nuevo{
+  width: 70%;
+  padding: 4px;
+  background-color: var(--color2);
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.iniciar:hover {
+  background-color: var(--color2hover);
+}
+
+.crear_nuevo:hover{
+  background-color: var(--color2hover);
+}
+
+
+.registrar {
+  width: 100%;
+  padding: 12px;
+  background-color: var(--colorRegistro);
+  border: none;
+  border-radius: 4px;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+.registrar:hover{
+  background-color: var(--colorRegistroHover);
+}
+
+.politicas{
+  text-decoration: none;
+  font-size: 12px;
+  color: #555;
+  text-align: justify;
+  padding: 10px;
+}
+
+.avisoerror{
+  color: red;
+  background-color: #ecc8c8;
+  padding: 5px;
+  transition: background-color 2s;
+}
+
+.btn-verde {
+  background-color: green;
+  color: white;
+  padding: 10px 20px;
+  text-decoration: none;
+  border-radius: 5px;
+  display: inline-block;
+  margin-bottom: 15px;
+}
+
+select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}

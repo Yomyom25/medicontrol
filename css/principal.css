@@ -1,0 +1,36 @@
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f9;
+  color: #333;
+}
+
+.dashboard {
+  display: flex;
+  flex: 1; /* Ocupa el espacio restante */
+}
+
+/* Contenido principal */
+.contenedor {
+  margin-left: 555px; /* Deja espacio para el sidebar */
+  margin-top: 50px; /* Deja espacio para el header */
+  padding: 20px;
+  flex: 1; /* Ocupa el espacio restante */
+  overflow-y: auto; /* Permite el desplazamiento vertical si el contenido es largo */
+}
+
+.content h2 {
+  margin-top: 0;
+  font-size: 28px;
+  color: #6200ea;
+}
+
+.content p {
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.img-principal {
+  width: 50%;
+}
