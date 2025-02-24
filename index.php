@@ -20,6 +20,10 @@ if (isset($_SESSION["autentificado"]) && $_SESSION["autentificado"] === "SI") {
 
 <div class="div-1200px">
 
+
+
+
+<div class="prueba"></div>
 <div class="img-logo">
     <a href="index.php">
         <img class="logo" src="img/hospital-icon.png" alt="Logo">
