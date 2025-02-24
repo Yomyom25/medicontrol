@@ -1,4 +1,4 @@
-<?php 
+<?php
 if (isset($_SESSION["autentificado"]) && $_SESSION["autentificado"] === "SI") {
     header("Location: principal.php");
     exit();
@@ -41,9 +41,6 @@ if (isset($_SESSION["autentificado"]) && $_SESSION["autentificado"] === "SI") {
             <input type="submit" value="Iniciar sesión" class="btn-login ancho-uniforme btn">
         </form>
 
-        <hr>
-
-        <input type="submit" value="Crear una cuenta" class="btn-cuenta btn" onclick="window.location.href='registro.php';">
     </div>
     </div>
 

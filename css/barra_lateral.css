@@ -1,0 +1,63 @@
+/* sidebar.css */
+.sidebar {
+  position: fixed;
+  top: 60px; /* Ajusta el top para que no se superponga con el header */
+  left: 0;
+  width: 215px; /* Ancho fijo del sidebar */
+  height: calc(100vh - 60px); /* Altura ajustada para no superponerse con el header */
+  background-color: #ffffff; /* Color de fondo del sidebar */
+  color: #444; /* Color del texto */
+  padding: 20px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+  z-index: 999; /* Asegura que el sidebar esté por encima del contenido principal */
+}
+
+.logout-button {
+  position: absolute;
+  bottom: 50px;
+  padding: 10px;
+  background-color: #31a1b4; /* Color de fondo del botón */
+  color: white; /* Color del texto del botón */
+  border: none;
+  cursor: pointer;
+  text-align: center;
+}
+
+.sidebar .logout-button:hover {
+  background-color: #11b19b; /* Cambio de color al pasar el mouse */
+}
+
+/* Estilos del menú de la barra lateral */
+.sidebar-menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-menu li {
+  margin-bottom: 15px;
+}
+
+.sidebar-menu .sidebar-link {
+  color: rgb(0, 0, 0);
+  text-decoration: none;
+  font-size: 18px;
+  display: block;
+  padding: 10px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.sidebar-menu .sidebar-link:hover {
+  background-color: #1f72c4; /* Cambio de color al pasar el mouse */
+}
+
+.main-content {
+  margin-left: 250px; /* Margen izquierdo para el sidebar */
+  margin-top: 60px; /* Margen superior para el header */
+  padding: 20px;
+  width: calc(100% - 250px); /* Ancho ajustado al espacio disponible */
+  height: calc(100vh - 60px); /* Altura ajustada al espacio disponible */
+  overflow-y: auto; /* Permite el desplazamiento vertical si el contenido es muy largo */
+  background-color: #f4f4f4;
+}
