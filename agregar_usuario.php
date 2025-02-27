@@ -32,9 +32,10 @@
 
             <div class="form-group">
                 <select id="tipo" name="tipo" required>
-                    <option value="" disabled selected>Selecciona un tipo</option>
+                    <option value="" disabled>Selecciona un tipo</option>
                     <option value="administrativo">Administrativo</option>
-                    <option value="usuario">Usuario</option>
+                    <option value="medico">Médico</option>
+                    <option value="paciente">Paciente</option>
                 </select>
             </div>
 
