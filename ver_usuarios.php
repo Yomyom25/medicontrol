@@ -32,7 +32,7 @@ $fila = mysqli_fetch_assoc($resultado);
             <div class="user-details">
                 <p><strong>Nombre:</strong> <?php echo $fila['nombre']?></p> <hr>
                 <p><strong>Email:</strong> <?php echo $fila['correo']; ?></p> <hr>
-                <p><strong>Contraseña:</strong> <?php echo $fila['contraseña']; ?></p> <hr>
+                <!-- <p><strong>Contraseña:</strong> <?php echo $fila['contraseña']; ?></p> <hr> -->
                 <p><strong>Tipo:</strong> <?php echo $fila['tipo']; ?></p> <hr>
             </div>
         </div>
