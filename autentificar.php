@@ -6,8 +6,8 @@ $contrasena = isset($_POST["contrasena"]) ? trim($_POST["contrasena"]) : "";
 
 // Si falta usuario o contraseña
 if (empty($usuario) || empty($contrasena)) {
-  header("Location: index.php?error=campos_vacios&usuario=" . urlencode($usuario));
-  exit();
+    header("Location: index.php?error=campos_vacios&usuario=" . urlencode($usuario));
+    exit();
 }
 
 // Evitar inyección SQL
@@ -19,8 +19,8 @@ $consulta_usuario = "SELECT * FROM usuarios WHERE nombre='$usuario'";
 $resultado_usuario = mysqli_query($conectar, $consulta_usuario);
 
 if (mysqli_num_rows($resultado_usuario) == 0) {
-  header("Location: index.php?error=usuario_incorrecto");
-  exit();
+    header("Location: index.php?error=usuario_incorrecto");
+    exit();
 }
 
 // Verificar si la contraseña es correcta
@@ -28,12 +28,14 @@ $consulta_contrasena = "SELECT * FROM usuarios WHERE nombre='$usuario' AND contr
 $resultado_contrasena = mysqli_query($conectar, $consulta_contrasena);
 
 if (mysqli_num_rows($resultado_contrasena) > 0) {
-  session_start();
-  $_SESSION["autentificado"] = "SI";
-  header("Location: principal.php");
+    session_start();
+    $_SESSION["autentificado"] = "SI";
+    header("Location: principal.php");
 } else {
-  header("Location: index.php?error=contrasena_incorrecta&usuario=" . urlencode($usuario));
+    header("Location: index.php?error=contrasena_incorrecta&usuario=" . urlencode($usuario));
 }
 
 mysqli_free_result($resultado_usuario);
 mysqli_free_result($resultado_contrasena);
+?>
+

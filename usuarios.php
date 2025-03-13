@@ -28,7 +28,7 @@
                         <th>ID</th>
                         <th>Nombre</th>
                         <th>Correo</th>
-                        <th>Contraseña</th>
+
                         <th>Tipo</th>
                         <th>Ver</th>
                         <th>Editar</th>
@@ -46,7 +46,7 @@
                         <td><?php echo $fila["id_usuario"];?></td>
                         <td><?php echo $fila["nombre"];?></td>
                         <td><?php echo $fila["correo"];?></td>
-                        <td><?php echo $fila["contraseña"];?></td>
+
                         <td><?php echo $fila["tipo"];?></td>
                         <td><a href="ver_usuarios.php?id_usuario=<?php echo $fila['id_usuario']; ?>"><img class="img-tabla" src="img/eye-solid.svg" alt="Ver"></a></td>
 
