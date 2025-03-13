@@ -1,5 +1,5 @@
 <?php
-require "utils/conexion.php";
+require "conexion.php";
 
 $usuario = isset($_POST["usuario"]) ? trim($_POST["usuario"]) : "";
 $contrasena = isset($_POST["contrasena"]) ? trim($_POST["contrasena"]) : "";
@@ -12,7 +12,6 @@ if (empty($usuario) || empty($contrasena)) {
 
 // Evitar inyección SQL
 $usuario = mysqli_real_escape_string($conectar, $usuario);
-$contrasena = mysqli_real_escape_string($conectar, $contrasena);
 
 // Verificar si el usuario existe
 $consulta_usuario = "SELECT * FROM usuarios WHERE nombre='$usuario'";
@@ -23,11 +22,11 @@ if (mysqli_num_rows($resultado_usuario) == 0) {
     exit();
 }
 
-// Verificar si la contraseña es correcta
-$consulta_contrasena = "SELECT * FROM usuarios WHERE nombre='$usuario' AND contraseña='$contrasena'";
-$resultado_contrasena = mysqli_query($conectar, $consulta_contrasena);
+// Obtener los datos del usuario
+$fila_usuario = mysqli_fetch_assoc($resultado_usuario);
 
-if (mysqli_num_rows($resultado_contrasena) > 0) {
+// Verificar si la contraseña es correcta
+if (password_verify($contrasena, $fila_usuario['contraseña'])) {
     session_start();
     $_SESSION["autentificado"] = "SI";
     header("Location: principal.php");
@@ -36,6 +35,4 @@ if (mysqli_num_rows($resultado_contrasena) > 0) {
 }
 
 mysqli_free_result($resultado_usuario);
-mysqli_free_result($resultado_contrasena);
 ?>
-

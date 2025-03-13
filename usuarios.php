@@ -1,6 +1,6 @@
 <?php include 'header.php'; ?>
 <?php include 'barra_lateral.php'; ?>
-<?php require "utils/conexion.php"; ?>
+<?php require "conexion.php"; ?>
 
 
 <!DOCTYPE html>

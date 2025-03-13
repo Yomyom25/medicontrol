@@ -1,5 +1,5 @@
 <?php
-require "utils/conexion.php";
+require "conexion.php";
 
 $nombre = addslashes($_POST ['nombre']);
 $correo = addslashes($_POST['correo']);

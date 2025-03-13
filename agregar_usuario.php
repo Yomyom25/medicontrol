@@ -12,7 +12,7 @@
 <body>
 
     <div class="dashboard-container">
-        <form class="register-form" action="insertar_user.php" method="POST" onsubmit="return validarEmail()">
+        <form class="register-form" action="guardar_usuarios.php" method="POST" onsubmit="return validarEmail()">
             <h2>Registro</h2>
 
             <a href="usuarios.php" class="btn btn-verde">Regresar</a>
