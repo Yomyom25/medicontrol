@@ -26,6 +26,7 @@
             </div>
 
             <div class="form-group">
+                <label for="" ><b>La contraseña debe tener 8 caracteres y una mayúscula</b></label>
                 <input type="password" id="contraseña" name="contraseña" placeholder="Contraseña" required>
             </div>
 
@@ -34,7 +35,7 @@
                 <select id="tipo" name="tipo" required>
                     <option value="" disabled selected>Selecciona un tipo</option>
                     <option value="administrativo">Administrativo</option>
-                    <option value="usuario">Usuario</option>
+                    <option value="Medico">Medico</option>
                 </select>
             </div>
 

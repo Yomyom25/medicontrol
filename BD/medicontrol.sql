@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 20-02-2025 a las 17:14:24
+-- Tiempo de generación: 13-03-2025 a las 16:15:42
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -134,7 +134,11 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`id_usuario`, `nombre`, `correo`, `contraseña`, `tipo`) VALUES
-(1, 'admin', 'admin@admin.com', 'admin', 'administrativo');
+(3, 'uno', 'uno@gmail.com', '$2y$10$AV2r3qQIjyuawNKs.fRT2em4y1m0Kv/mieDnuaB0LYfhKkvuU8PDi', 'administrativo'),
+(4, 'dos', 'dos@gmail.com', '$2y$10$0mlQxqDu0apCt9anfH5UHOQAuE2DVU4KyuPgJn0m6MbQFadrUy6uO', 'administrativo'),
+(5, 'admin', 'admin@admin.com', '$2y$10$vvhAHhZ1WXiL8fvEG3akaev1mDYiTTy1TQHmzGPsB5hV0rMWjQ34a', 'administrativo'),
+(6, 'yom', 'yomyeh25@gmail.com', '$2y$10$A6nj3RFbGiyI.37JnZQMheM.020hogNtAf3PqDvPOuS2SX5pbvh.S', 'administrativo'),
+(7, 'prueba', 'prueba@gmail.com', '$2y$10$UARPc8WcgHWUGQEkeuzDRuWyVf3Glb5af/4ftLxpj4aUCbbZCDuD2', 'administrativo');
 
 --
 -- Índices para tablas volcadas
@@ -247,7 +251,7 @@ ALTER TABLE `reportes`
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- Restricciones para tablas volcadas
