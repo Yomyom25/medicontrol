@@ -1,6 +1,3 @@
-<?php include 'header.php'; ?>
-<?php include 'barra_lateral.php'; ?>
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -14,35 +11,47 @@
     <div class="dashboard-container">
         <form class="register-form" action="guardar_usuarios.php" method="POST" onsubmit="return validarEmail()">
             <h2>Registro</h2>
+            <p class="obligatorio-texto">Todos los campos marcados con (<span class="obligatorio">*</span>) son obligatorios</p>
 
             <a href="usuarios.php" class="btn btn-verde">Regresar</a>
 
             <div class="form-group">
-                <input type="text" id="nombre" name="nombre" placeholder="Nombre" >
+                <input type="text" id="nombre" name="nombre" placeholder="Nombre *" required>
             </div>
 
             <div class="form-group">
-                <input type="correo" id="correo" name="correo" placeholder="Correo electrónico" >
+                <input type="correo" id="correo" name="correo" placeholder="Correo electrónico *" required>
             </div>
 
             <div class="form-group">
                 <label for="" ><b>La contraseña debe tener 8 caracteres y una mayúscula</b></label>
-                <input type="password" id="contraseña" name="contraseña" placeholder="Contraseña" required>
+                <input type="password" id="contraseña" name="contraseña" placeholder="Contraseña *" required>
             </div>
-
 
             <div class="form-group">
                 <select id="tipo" name="tipo" required>
-                    <option value="" disabled selected>Selecciona un tipo</option>
+                    <option value="" disabled selected>Selecciona un tipo *</option>
                     <option value="administrativo">Administrativo</option>
                     <option value="Medico">Medico</option>
                 </select>
             </div>
 
-
             <button class="registrar" type="submit">Registrarse</button>
         </form>
     </div>
+
+    <style>
+        .obligatorio {
+            color: red;
+            font-weight: bold;
+        }
+        .obligatorio-texto {
+            color: #666;
+            font-size: 14px;
+            margin-top: -10px;
+            margin-bottom: 20px;
+        }
+    </style>
 
     <script>
         // Función para validar el correo electrónico

@@ -1,11 +1,13 @@
 <?php
+session_start(); // ← esto permite acceder a $_SESSION
+
 if (isset($_SESSION["autentificado"]) && $_SESSION["autentificado"] === "SI") {
     header("Location: principal.php");
     exit();
 }
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,19 +17,15 @@ if (isset($_SESSION["autentificado"]) && $_SESSION["autentificado"] === "SI") {
 </head>
 <body>
 <div class="div-1200px">
-<div class="img-logo">
-    <a href="index.php">
-        <img class="logo" src="img/hospital-icon.png" alt="Logo">
-    </a>
+    <div class="img-logo">
+        <a href="index.php">
+            <img class="logo" src="img/hospital-icon.png" alt="Logo">
+        </a>
     </div>
     <div class="background_login">
         <h1>Iniciar sesión</h1>
         <form action="autentificar.php" method="post" name="login_plantilla">
             <?php
-            // $errorusuario = isset ($_GET["errorusuario"]);
-            // if($errorusuario == "SI") {
-            //     echo "<p class='error'>Usuario o contraseña incorrectos</p>";
-            // }
             if (isset($_GET["error"])) {
                 if ($_GET["error"] == "campos_vacios") {
                     echo "<p class='error'>Debes llenar ambos campos.</p>";
@@ -40,14 +38,12 @@ if (isset($_SESSION["autentificado"]) && $_SESSION["autentificado"] === "SI") {
             ?>
             <input type="text" name="usuario" placeholder="Nombre de usuario" class="input-login ancho-uniforme"
             value="<?php echo isset($_GET['usuario']) ? htmlspecialchars($_GET['usuario']) : ''; ?>">
-            <input type="password" name="contrasena" placeholder="Contraseña" class="input-login ancho-uniforme ">
-             <br>
+            <input type="password" name="contrasena" placeholder="Contraseña" class="input-login ancho-uniforme">
+            <br>
             <input type="submit" value="Iniciar sesión" class="btn-login ancho-uniforme btn">
         </form>
-
-    </div>
     </div>
 </div>
-    <script src="scripts/validacion.js"></script> 
+<script src="scripts/validacion.js"></script> 
 </body>
 </html>

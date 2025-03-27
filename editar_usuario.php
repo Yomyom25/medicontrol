@@ -11,6 +11,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar Usuarios</title>
     <link rel="stylesheet" href="css/agregar_user.css">
+    <style>
+        .obligatorio {
+            color: red;
+            font-weight: bold;
+        }
+        .obligatorio-texto {
+            color: #666;
+            font-size: 14px;
+            margin-top: -10px;
+            margin-bottom: 15px;
+        }
+        .campo-obligatorio::after {
+            content: " *";
+            color: red;
+        }
+    </style>
 </head>
 
 <body>
@@ -25,25 +41,29 @@
     <div class="dashboard-container">
         <form class="register-form" action="guardar_usuario2.php" method="POST" onsubmit="return validarEmail()">
             <h2>Editar Usuario</h2>
+            <p class="obligatorio-texto">Todos los campos marcados con (<span class="obligatorio">*</span>) son obligatorios</p>
 
-                    <div class="btn-new">
-            <a href="cambio_password.php" class="btn-azul">Modificar la contraseña</a>
-        </div>
+            <div class="btn-new">
+                <a href="cambio_password.php" class="btn-azul">Modificar la contraseña</a>
+            </div>
 
             <a href="ver_usuarios.php?id_usuario=<?php echo $fila['id_usuario']; ?>" class="btn btn-verde">Regresar</a>
 
             <!-- Nombre -->
             <div class="form-group">
+                <label class="campo-obligatorio">Nombre</label>
                 <input type="text" id="nombre" name="nombre" value="<?php echo trim($fila['nombre']); ?>" placeholder="Nombre" required>
             </div>
 
             <!-- Mostrar correo (solo lectura) -->
             <div class="form-group">
-                <input type="email" id="correo" name="correo" value="<?php echo trim($fila['correo']); ?>" placeholder="Correo" readonly>
+                <label class="campo-obligatorio">Correo electrónico</label>
+                <input type="email" id="correo" name="correo" value="<?php echo trim($fila['correo']); ?>" placeholder="Correo" readonly required>
             </div>
 
             <!-- Tipo de usuario -->
             <div class="form-group">
+                <label class="campo-obligatorio">Tipo de usuario</label>
                 <select id="tipo" name="tipo" required>
                     <option value="" disabled <?php echo empty($fila['tipo']) ? 'selected' : ''; ?>>Selecciona un tipo</option>
                     <option value="administrativo" <?php echo ($fila['tipo'] == 'administrativo') ? 'selected' : ''; ?>>Administrativo</option>
@@ -53,17 +73,15 @@
 
             <!-- Campos ocultos -->
             <input type="hidden" name="id_usuario" value="<?php echo $fila['id_usuario']; ?>">
-            <input type="hidden" name="password" value="<?php echo $fila['contraseña']; ?>"> <!-- se mantiene por si se requiere al actualizar -->
+            <input type="hidden" name="password" value="<?php echo $fila['contraseña']; ?>">
 
             <button class="registrar" type="submit">Guardar Usuario</button>
             <br>
         </form>
-
-
     </div>
 
     <script>
-        // Función para validar el correo electrónico (aunque es readonly, por seguridad se mantiene la validación)
+        // Función para validar el correo electrónico
         function validarEmail() {
             const emailInput = document.getElementById('correo');
             const email = emailInput.value.trim();
@@ -85,5 +103,4 @@
     </script>
 
 </body>
-
 </html>

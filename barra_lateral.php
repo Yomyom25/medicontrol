@@ -13,14 +13,14 @@
             <!-- Opciones de la barra lateral -->
             <ul class="sidebar-menu">
                 <li><a href="Principal.php" class="sidebar-link">Inicio</a></li>
-                <li><a href="#" class="sidebar-link">Opción #</a></li>
+                <li><a href="citas.php" class="sidebar-link">Citas</a></li>
                 <li><a href="#" class="sidebar-link">Opción #</a></li>
                 <li><a href="usuarios.php" class="sidebar-link">Usuarios</a></li>
             </ul>
 
             <!-- Botón "Salir" -->
             <div class="logout-button">
-                <a href="index.php" class="btn-salir">Salir</a>
+                <a href="salir.php" class="btn-salir">Salir</a>
             </div>
         </div>
     </aside>

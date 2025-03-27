@@ -1,5 +1,19 @@
-<?php include 'header.php';?>
-<?php include 'barra_lateral.php';?>
+<?php 
+session_start();
+include 'header.php';
+include 'barra_lateral.php';
+
+// verificar si el usuario está autenticado
+if (!isset($_SESSION["autentificado"])) {
+    header("Location: index.php");
+    exit();
+}
+
+// obtener el tipo de usuario y nombre
+$tipo_usuario = isset($_SESSION["tipo"]) ? $_SESSION["tipo"] : "usuario";
+$nombre_usuario = isset($_SESSION["nombre"]) ? $_SESSION["nombre"] : "Invitado";
+
+?>
 
 <!DOCTYPE html>
 <html lang="es">
@@ -11,12 +25,19 @@
 </head>
 <body>
 
-
   <div class="contenedor">
-    <h1>PANEL ADMINISTRATIVO</h1>
+    <h1>PANEL PRINCIPAL</h1>
+
+    <?php if ($tipo_usuario === "administrativo") : ?>
+      <h2 style="color: green;">Bienvenido, <?php echo htmlspecialchars($nombre_usuario); ?></h2>
+    <?php else : ?>
+      <h2 style="color: blue;">Bienvenido, <?php echo htmlspecialchars($nombre_usuario); ?></h2>
+    <?php endif; ?>
+
     <div class="img-principal">
       <img class="principal" src="img/house-solid.svg" alt="principal">
     </div>
   </div>
+
 </body>
 </html>
