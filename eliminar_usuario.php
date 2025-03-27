@@ -1,5 +1,5 @@
 <?php
-include 'utils/conexion.php';
+include 'conexion.php';
 
 $id_usuario = $_GET['id_usuario'];
 
