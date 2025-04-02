@@ -35,6 +35,11 @@
         </div>
         
         <div class="form-group">
+          <label>Curp:</label>
+          <input type="text" name="curp" required>
+        </div>
+
+        <div class="form-group">
           <label>Fecha:</label>
           <input type="date" name="fecha_cita" required>
         </div>
