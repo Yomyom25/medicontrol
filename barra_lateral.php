@@ -14,7 +14,7 @@
             <ul class="sidebar-menu">
                 <li><a href="Principal.php" class="sidebar-link">Inicio</a></li>
                 <li><a href="citas.php" class="sidebar-link">Citas</a></li>
-                <li><a href="#" class="sidebar-link">Opción #</a></li>
+                <li><a href="pacientes.php" class="sidebar-link">Pacientes</a></li>
                 <li><a href="usuarios.php" class="sidebar-link">Usuarios</a></li>
             </ul>
 
