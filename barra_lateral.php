@@ -13,8 +13,9 @@
             <!-- Opciones de la barra lateral -->
             <ul class="sidebar-menu">
                 <li><a href="Principal.php" class="sidebar-link">Inicio</a></li>
-                <li><a href="citas.php" class="sidebar-link">Citas</a></li>
+                <li><a href="dashboard_citas.php" class="sidebar-link">Citas</a></li>
                 <li><a href="pacientes.php" class="sidebar-link">Pacientes</a></li>
+                <li><a href="lista_medicos.php" class="sidebar-link">Medicos</a></li>
                 <li><a href="usuarios.php" class="sidebar-link">Usuarios</a></li>
             </ul>
 
