@@ -1,62 +1,42 @@
 <?php
-//Archivo para guardar los usuarios agregados en el DashBoard
 require "conexion.php";
 
-$apellido_id = addslashes($_POST['paciente']); // ID del paciente seleccionado
-$curp_p = addslashes($_POST['curp']);
-$fecha = addslashes($_POST['fecha_cita']);
-$hora = addslashes($_POST['hora_cita']);
-$especialidad = addslashes($_POST['especialidad']);
-$medico = addslashes($_POST['medico']);
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $paciente_id = trim($_POST['paciente'] ?? '');
+    $medico_id = trim($_POST['medico'] ?? '');
+    $fecha_cita = trim($_POST['fecha_cita'] ?? '');
+    $hora_cita = trim($_POST['hora_cita'] ?? '');
 
-// Obtener el CURP del paciente seleccionado según su ID
-$consulta_paciente = "SELECT curp FROM pacientes WHERE id_pacientes = '$apellido_id'";
-$resultado_paciente = mysqli_query($conectar, $consulta_paciente);
-$fila_paciente = mysqli_fetch_assoc($resultado_paciente);
-
-if ($fila_paciente) {
-    $curp_real = $fila_paciente['curp']; // CURP correcto según la BD
-
-    // Verificar si el CURP ingresado coincide con el CURP de la BD
-    if ($curp_real !== $curp_p) {
-        echo '
-            <script>
-                alert("El CURP ingresado no coincide con el paciente seleccionado.");
-                window.history.back(); // Regresar al formulario
-            </script>
-        ';
+    if (empty($paciente_id) || empty($medico_id) || empty($fecha_cita) || empty($hora_cita)) {
+        echo '<script>alert("Por favor, complete todos los campos obligatorios."); window.history.back();</script>';
         exit();
     }
 
-    // Si el CURP es correcto, insertamos la cita en la BD
-    $insertar_datos = "INSERT INTO citas (apellido_paciente, curp_paciente, fecha, hora, especialidad, medico) 
-                       VALUES ('$apellido_id', '$curp_p', '$fecha', '$hora', '$especialidad', '$medico')";
-
-    $guardar_dash = mysqli_query($conectar, $insertar_datos);
-
-    if ($guardar_dash) {
-        echo '
-            <script>
-                alert("Se guardó correctamente la cita.");
-                location.href="citas.php";
-            </script>
-        ';
-    } else {
-        echo '
-            <script>
-                alert("Error al guardar la cita.");
-                location.href="citas.php";
-            </script>
-        ';
+    $fecha_actual = date("Y-m-d");
+    if ($fecha_cita < $fecha_actual) {
+        echo '<script>alert("La fecha de la cita no puede ser anterior al día actual."); window.history.back();</script>';
+        exit();
     }
-} else {
-    echo '
-        <script>
-            alert("Error: No se encontró el paciente en la base de datos.");
-            window.history.back();
-        </script>
-    ';
-}
 
-exit();
+    if ($hora_cita < "07:00" || $hora_cita > "15:00") {
+        echo '<script>alert("La hora debe estar entre 7:00 AM y 3:00 PM."); window.history.back();</script>';
+        exit();
+    }
+
+    // Inserción con el campo estatus
+    $estatus = 'P'; // P de Pendiente
+    $query = $conectar->prepare("INSERT INTO citas (paciente, medico, fecha, hora, estatus) VALUES (?, ?, ?, ?, ?)");
+    $query->bind_param("iisss", $paciente_id, $medico_id, $fecha_cita, $hora_cita, $estatus);
+
+    if ($query->execute()) {
+        echo '<script>alert("Cita registrada exitosamente."); location.href = "dashboard_citas.php";</script>';
+    } else {
+        echo '<script>alert("Error al registrar la cita: ' . $query->error . '"); window.history.back();</script>';
+    }
+
+    $query->close();
+    $conectar->close();
+} else {
+    echo '<script>alert("Acceso no autorizado."); location.href = "index.php";</script>';
+}
 ?>
