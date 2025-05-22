@@ -11,12 +11,17 @@
 </head>
 <body>
   <div class="contenedor">
-    <h1>Formulario de Citas Médicas</h1>
+    <h1>Editar Citas Médicas</h1>
 
     <a class="btn-submit" href="dashboard_citas.php">Regresar</a>
     <br>
     
-    <form action="guardar_citas.php" method="post">
+    <form action="Actualizar_citas.php" method="post">
+
+
+    <!-- Input hidden para el ID de la cita -->
+    <input type="hidden" name="cita_id" value="<?php    echo $_GET['id']; ?>">
+
       <!-- Datos de la Cita -->
     <div class="form-group">
       <label>Buscar paciente:</label>
@@ -49,7 +54,7 @@
         <select name="especialidad" required>
           <option value="">Seleccione...</option>
           <?php
-            include "conexion.php";
+            include "utils/conexion.php";
             $ver_especialidad = "SELECT * FROM especialidad";
             $resultado = mysqli_query($conectar, $ver_especialidad);
             ;
@@ -86,7 +91,7 @@
         </select>
       </div>
     </div>
-    <button class="btn-submit">Crear Cita</button>
+    <button class="btn-submit">Actulizar Cita</button>
     </form>
   </div>
   <!--Parte de los Scrips del codigo-->

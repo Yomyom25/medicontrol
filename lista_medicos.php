@@ -54,7 +54,7 @@ $usuario_autenticado = $_SESSION["nombre"];
                         <td><?php echo $fila["email"]; ?></td>
                         <td><?php echo $fila["tel_contacto"]; ?></td>
                         <td><?php echo $fila["especialidad"]; ?></td>
-                        <td><a href="ver_medico.php?id_medico=<?php echo $id_medico; ?>"><img class="img-tabla" src="img/eye-solid.svg" alt="Ver"></a></td>
+                        <td><a href="mostrarcitas_medicos.php?id_medico=<?php echo $id_medico; ?>"><img class="img-tabla" src="img/eye-solid.svg" alt="Ver"></a></td>
                         
                         <td>
                             <a href="editar_medico.php?id_medico=<?php echo $id_medico; ?>"><img class="img-tabla" src="img/pen-to-square-solid.svg" alt="Editar"></a>
