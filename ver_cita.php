@@ -3,7 +3,6 @@ include 'header.php';
 include 'barra_lateral.php';
 include 'conexion.php';
 
-// Obtener el ID de la cita desde la URL
 $cita_id = $_GET['id'] ?? 0;
 
 // Consulta para obtener todos los detalles de la cita
@@ -24,7 +23,8 @@ $query = "
         m.cedula,
         m.email AS email_medico,
         m.tel_contacto,
-        e.nombre_especialidad
+        e.nombre_especialidad,
+        c.notas
     FROM citas c
     INNER JOIN pacientes p ON c.paciente = p.ID_paciente
     INNER JOIN medicos m ON c.medico = m.ID_medico
@@ -38,18 +38,15 @@ $stmt->execute();
 $resultado = $stmt->get_result();
 $cita = $resultado->fetch_assoc();
 
-// Verificar si la cita existe
 if (!$cita) {
     echo '<script>alert("Cita no encontrada."); location.href = "dashboard_citas.php";</script>';
     exit();
 }
 
-// Calcular la edad del paciente
 $fecha_nacimiento = new DateTime($cita['fecha_nacimiento']);
 $hoy = new DateTime();
 $edad = $hoy->diff($fecha_nacimiento)->y;
 
-// Determinar el estado de la cita
 $estado_cita = ($cita['estatus'] == 'R') ? 'Realizada' : 'Pendiente';
 ?>
 
@@ -126,6 +123,26 @@ $estado_cita = ($cita['estatus'] == 'R') ? 'Realizada' : 'Pendiente';
       background-color: #218838;
     }
 
+    .btn-notas {
+      background-color: #007bff;
+      color: white;
+      border: none;
+    }
+
+    .btn-notas:hover {
+      background-color: #0056b3;
+    }
+
+    .btn-reporte {
+      background-color: #17a2b8;
+      color: white;
+      border: none;
+    }
+
+    .btn-reporte:hover {
+      background-color: #138496;
+    }
+
     .estado-realizada {
       color: #28a745;
       font-weight: bold;
@@ -144,7 +161,7 @@ $estado_cita = ($cita['estatus'] == 'R') ? 'Realizada' : 'Pendiente';
     <div class="form-group">
       <label>Información del Paciente:</label>
       <div class="valor">
-<strong>Nombre completo:</strong> <?php echo htmlspecialchars($cita['apellido_paciente'] . ' ' . $cita['nombre_paciente']); ?><br>
+        <strong>Nombre completo:</strong> <?php echo htmlspecialchars($cita['apellido_paciente'] . ' ' . $cita['nombre_paciente']); ?><br>
         <strong>Edad:</strong> <?php echo $edad; ?> años<br>
         <strong>Sexo:</strong> <?php echo ($cita['sexo'] == 'M') ? 'Masculino' : 'Femenino'; ?><br>
         <strong>CURP:</strong> <?php echo htmlspecialchars($cita['curp']); ?>
@@ -173,11 +190,23 @@ $estado_cita = ($cita['estatus'] == 'R') ? 'Realizada' : 'Pendiente';
       </div>
     </div>
 
+    <?php if (!empty($cita['notas'])): ?>
+    <div class="form-group">
+      <label>Notas:</label>
+      <div class="valor">
+        <?php echo nl2br(htmlspecialchars($cita['notas'])); ?>
+      </div>
+    </div>
+    <?php endif; ?>
+
     <div class="btn-container">
       <a href="dashboard_citas.php" class="btn btn-back">Regresar</a>
       
       <?php if ($cita['estatus'] != 'R'): ?>
         <button onclick="marcarComoRealizada()" class="btn btn-realizada">Marcar como Realizada</button>
+      <?php else: ?>
+        <a href="agregar_notas.php?id=<?php echo $cita_id; ?>" class="btn btn-notas">Agregar Notas</a>
+        <a href="reporte_cita.php?id=<?php echo $cita_id; ?>" class="btn btn-reporte">Generar Reporte</a>
       <?php endif; ?>
     </div>
   </div>
@@ -185,13 +214,12 @@ $estado_cita = ($cita['estatus'] == 'R') ? 'Realizada' : 'Pendiente';
   <script>
     function marcarComoRealizada() {
       if (confirm('¿Está seguro que desea marcar esta cita como realizada? Esta acción no se puede deshacer.')) {
-        // Enviar solicitud para actualizar el estado
         fetch('marcar_realizada.php?id=<?php echo $cita_id; ?>')
           .then(response => response.json())
           .then(data => {
             if (data.success) {
               alert('La cita ha sido marcada como realizada.');
-              location.reload(); // Recargar la página para mostrar los cambios
+              location.reload();
             } else {
               alert('Error al actualizar el estado: ' + data.message);
             }
