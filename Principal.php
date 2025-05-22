@@ -9,10 +9,18 @@ if (!isset($_SESSION["autentificado"])) {
     exit();
 }
 
-// obtener el tipo de usuario y nombre
-$tipo_usuario = isset($_SESSION["tipo"]) ? $_SESSION["tipo"] : "usuario";
-$nombre_usuario = isset($_SESSION["nombre"]) ? $_SESSION["nombre"] : "Invitado";
+// Obtener el tipo de usuario y nombre
+$tipo_usuario = isset($_SESSION["tipo"]) ? $_SESSION["tipo"] : "";
+$nombre_usuario = isset($_SESSION["usuario"]) ? $_SESSION["usuario"] : "";
 
+// Convertir el tipo de usuario a texto legible
+if ($tipo_usuario === "M") {
+    $tipo_usuario = "Médico";
+} elseif ($tipo_usuario === "A") {
+    $tipo_usuario = "Administrador";
+} else {
+    $tipo_usuario = "Usuario Desconocido";
+}
 ?>
 
 <!DOCTYPE html>
@@ -28,10 +36,13 @@ $nombre_usuario = isset($_SESSION["nombre"]) ? $_SESSION["nombre"] : "Invitado";
   <div class="contenedor">
     <h1>PANEL PRINCIPAL</h1>
 
-    <?php if ($tipo_usuario === "administrativo") : ?>
-      <h2 style="color: green;">Bienvenido, <?php echo htmlspecialchars($nombre_usuario); ?></h2>
+    <!-- Mostrar el mensaje de bienvenida -->
+    <?php if ($tipo_usuario === "Administrador") : ?>
+      <h2 style="color: green;">Bienvenido, <?php echo htmlspecialchars($nombre_usuario); ?> (<?php echo htmlspecialchars($tipo_usuario); ?>)</h2>
+    <?php elseif ($tipo_usuario === "Médico") : ?>
+      <h2 style="color: blue;">Bienvenido, <?php echo htmlspecialchars($nombre_usuario); ?> (<?php echo htmlspecialchars($tipo_usuario); ?>)</h2>
     <?php else : ?>
-      <h2 style="color: blue;">Bienvenido, <?php echo htmlspecialchars($nombre_usuario); ?></h2>
+      <h2 style="color: gray;">Bienvenido, <?php echo htmlspecialchars($nombre_usuario); ?> (<?php echo htmlspecialchars($tipo_usuario); ?>)</h2>
     <?php endif; ?>
 
     <div class="img-principal">

@@ -14,7 +14,7 @@ if (empty($id_usuario)) {
     exit();
 }
 
-$sql = "SELECT * FROM usuarios WHERE id_usuario = '$id_usuario'"; // Consulta SQL con el ID recibido
+$sql = "SELECT * FROM usuarios WHERE ID_usuario = '$id_usuario'"; // Consulta SQL con el ID recibido
 $resultado = mysqli_query($conectar, $sql);
 
 if ($resultado) {
@@ -48,11 +48,15 @@ if ($resultado) {
         <div class="body">
 
             <h2>Detalles del Usuario</h2>
-            <a href="ver_usuarios.php" class="btn btn-verde">Regresar</a> <!-- Corregir URL del botón regresar -->
+            <a href="usuarios.php" class="btn btn-verde">Regresar</a>
             <div class="user-details">
-                <p><strong>Nombre:</strong> <?php echo $fila['nombre']?></p> <hr>
-                <p><strong>Email:</strong> <?php echo $fila['correo']; ?></p> <hr>
-                <p><strong>Tipo:</strong> <?php echo $fila['tipo']; ?></p> <hr>
+                <p><strong>Nombre:</strong> <?php echo htmlspecialchars($fila['usuario']); ?></p> <hr>
+                <p><strong>Email:</strong> <?php echo htmlspecialchars($fila['correo']); ?></p> <hr>
+                <p><strong>Tipo:</strong> 
+                    <?php 
+                    echo ($fila['tipo'] === 'A') ? 'Administrador' : 'Médico'; 
+                    ?>
+                </p> <hr>
             </div>
         </div>
 

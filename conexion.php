@@ -2,7 +2,7 @@
 $host = "localhost";
 $user = "root";
 $contrasena = "";
-$bd = "medicontrol";
+$bd = "medicontrol_bd";
 
 $conectar = mysqli_connect($host, $user, $contrasena, $bd);
 

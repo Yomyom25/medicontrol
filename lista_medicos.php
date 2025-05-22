@@ -4,6 +4,12 @@ require "conexion.php";
 include 'header.php';
 include 'barra_lateral.php';
 
+// // Verificar si el usuario está autenticado
+// if (!isset($_SESSION["nombre"])) {
+//     header("Location: index.php");
+//     exit();
+// }
+
 // Obtener el nombre del usuario autenticado
 $usuario_autenticado = $_SESSION["nombre"];
 ?>
@@ -40,12 +46,23 @@ $usuario_autenticado = $_SESSION["nombre"];
                 </thead>
                 <tbody>
                     <?php
-                    $todos_medicos = "SELECT * FROM medicos ORDER BY id_medicos ASC";
+                    $todos_medicos = "
+                        SELECT 
+                            m.ID_medico, 
+                            m.nombre AS nombre_medico, 
+                            m.cedula, 
+                            m.email, 
+                            m.tel_contacto, 
+                            e.nombre_especialidad 
+                        FROM medicos m
+                        INNER JOIN especialidades e ON m.especialidad = e.ID_especialidad
+                        ORDER BY m.ID_medico ASC";
+                    
                     $resultado = mysqli_query($conectar, $todos_medicos);
 
-                    while ($fila = $resultado->fetch_array()) {
-                        $id_medico = $fila["id_medicos"];
-                        $nombre_medico = $fila["nombre"];
+                    while ($fila = $resultado->fetch_assoc()) {
+                        $id_medico = $fila["ID_medico"];
+                        $nombre_medico = $fila["nombre_medico"];
                     ?>
                     <tr>
                         <td><?php echo $id_medico; ?></td>
@@ -53,7 +70,7 @@ $usuario_autenticado = $_SESSION["nombre"];
                         <td><?php echo $fila["cedula"]; ?></td>
                         <td><?php echo $fila["email"]; ?></td>
                         <td><?php echo $fila["tel_contacto"]; ?></td>
-                        <td><?php echo $fila["especialidad"]; ?></td>
+                        <td><?php echo $fila["nombre_especialidad"]; ?></td>
                         <td><a href="mostrarcitas_medicos.php?id_medico=<?php echo $id_medico; ?>"><img class="img-tabla" src="img/eye-solid.svg" alt="Ver"></a></td>
                         
                         <td>

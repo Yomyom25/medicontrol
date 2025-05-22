@@ -1,5 +1,5 @@
-<?php include 'header.php';?>
-<?php include 'barra_lateral.php';?>
+<?php include 'header.php'; ?>
+<?php include 'barra_lateral.php'; ?>
 
 <!DOCTYPE html>
 <html lang="es">
@@ -43,33 +43,52 @@
   <div class="contenedor">
     <h1>Citas del Médico</h1>
     <?php
-      // Obtener el nombre del médico desde la URL
-      $medico = isset($_GET['medico']) ? htmlspecialchars($_GET['medico']) : 'Desconocido';
+      include "conexion.php";
 
-      // Simulación de datos de la base de datos
-      $citas = [
-        'Dr. López' => [
-          ['paciente' => 'Juan Pérez', 'fecha' => '2025-05-10'],
-          ['paciente' => 'Ana Torres', 'fecha' => '2025-05-15'],
-        ],
-        'Dr. Martínez' => [
-          ['paciente' => 'María Gómez', 'fecha' => '2025-05-12'],
-        ],
-      ];
+      // Obtener el ID del médico desde la URL
+      $medico_id = isset($_GET['id_medico']) ? intval($_GET['id_medico']) : 0;
 
-      echo "<h2>Médico: $medico</h2>";
+      // Validar que el ID del médico es válido
+      if ($medico_id > 0) {
+        // Consulta SQL para obtener las citas del médico seleccionado
+        $query = "
+          SELECT 
+            p.nombre AS paciente_nombre, 
+            p.apellido AS paciente_apellido, 
+            c.fecha AS fecha_cita 
+          FROM citas c
+          INNER JOIN pacientes p ON c.paciente = p.ID_paciente
+          WHERE c.medico = ?
+          ORDER BY c.fecha ASC
+        ";
 
-      // Verificar si existen citas para el médico
-      if (array_key_exists($medico, $citas) && count($citas[$medico]) > 0) {
-        echo '<table>';
-        echo '<thead><tr><th>Nombre del Paciente</th><th>Fecha de la Cita</th></tr></thead><tbody>';
-        foreach ($citas[$medico] as $cita) {
-          echo "<tr><td>{$cita['paciente']}</td><td>{$cita['fecha']}</td></tr>";
+        // Preparar la consulta
+        $stmt = $conectar->prepare($query);
+        $stmt->bind_param("i", $medico_id);
+        $stmt->execute();
+        $resultado = $stmt->get_result();
+
+        // Verificar si hay citas
+        if ($resultado->num_rows > 0) {
+          echo '<table>';
+          echo '<thead><tr><th>Nombre del Paciente</th><th>Fecha de la Cita</th></tr></thead><tbody>';
+          while ($fila = $resultado->fetch_assoc()) {
+            $nombre_completo = $fila['paciente_apellido'] . ' ' . $fila['paciente_nombre'];
+            echo "<tr><td>{$nombre_completo}</td><td>{$fila['fecha_cita']}</td></tr>";
+          }
+          echo '</tbody></table>';
+        } else {
+          echo '<p class="no-data">No hay citas disponibles para este médico.</p>';
         }
-        echo '</tbody></table>';
+
+        // Liberar resultados y cerrar la consulta
+        $stmt->close();
       } else {
-        echo '<p class="no-data">No hay citas disponibles para este médico.</p>';
+        echo '<p class="no-data">No se encontró un médico válido.</p>';
       }
+
+      // Cerrar la conexión
+      $conectar->close();
     ?>
   </div>
 </body>

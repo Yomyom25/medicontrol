@@ -1,88 +1,107 @@
-
-
 <?php
 require "conexion.php";
 
 $cita_id = addslashes($_POST['cita_id']);
-$paciente_id = addslashes($_POST['paciente']); // ID del paciente seleccionado
-$curp_formulario = addslashes($_POST['curp']);
-$fecha = addslashes($_POST['fecha_cita']);
-$hora = addslashes($_POST['hora_cita']);
-$especialidad_id = addslashes($_POST['especialidad']);
-$medico_id = addslashes($_POST['medico']);
+$paciente_id = !empty($_POST['paciente']) ? addslashes($_POST['paciente']) : null;
+$fecha = !empty($_POST['fecha_cita']) ? addslashes($_POST['fecha_cita']) : null;
+$hora = !empty($_POST['hora_cita']) ? addslashes($_POST['hora_cita']) : null;
+$medico_id = !empty($_POST['medico']) ? addslashes($_POST['medico']) : null;
 
-// Obtener los datos actuales de la cita
-$consulta_actual = "SELECT * FROM citas WHERE id_citas = '$cita_id'";
-$resultado_actual = mysqli_query($conectar, $consulta_actual);
-$cita_actual = mysqli_fetch_assoc($resultado_actual);
+// Obtener datos actuales de la cita
+$query_actual = $conectar->prepare("SELECT * FROM citas WHERE ID_citas = ?");
+$query_actual->bind_param("i", $cita_id);
+$query_actual->execute();
+$resultado_actual = $query_actual->get_result();
+$cita_actual = $resultado_actual->fetch_assoc();
 
 if (!$cita_actual) {
-    echo '<script>alert("Error: No se encontró la cita en la base de datos."); window.history.back();</script>';
+    echo '<script>alert("Error: Cita no encontrada."); window.history.back();</script>';
     exit();
 }
 
-// Validar si los datos capturados son iguales a los actuales
-if (
-    $cita_actual['curp_paciente'] === $curp_real &&
-    $cita_actual['fecha'] === $fecha &&
-    $cita_actual['hora'] === $hora &&
-    $cita_actual['especialidad'] === $especialidad_id &&
-    $cita_actual['medico'] === $medico_id
-) {
-    echo '<script>alert("No se ha realizado ningún cambio en los datos."); window.history.back();</script>';
+// Validar CURP del paciente si se proporcionó un nuevo paciente
+if ($paciente_id) {
+    $query_paciente = $conectar->prepare("SELECT curp FROM pacientes WHERE ID_paciente = ?");
+    $query_paciente->bind_param("i", $paciente_id);
+    $query_paciente->execute();
+    $resultado_paciente = $query_paciente->get_result();
+    $paciente = $resultado_paciente->fetch_assoc();
+
+    if (!$paciente) {
+        echo '<script>alert("Error: Paciente no encontrado."); window.history.back();</script>';
+        exit();
+    }
+
+    $curp_real = $paciente['curp'];
+
+    // Verificar conflicto de citas del paciente
+    if ($fecha && $hora) {
+        $query_conflicto_paciente = $conectar->prepare(
+            "SELECT * FROM citas WHERE paciente = ? AND fecha = ? AND hora = ? AND ID_citas != ?"
+        );
+        $query_conflicto_paciente->bind_param("issi", $paciente_id, $fecha, $hora, $cita_id);
+        $query_conflicto_paciente->execute();
+        $resultado_conflicto_paciente = $query_conflicto_paciente->get_result();
+
+        if ($resultado_conflicto_paciente->num_rows > 0) {
+            echo '<script>alert("El paciente ya tiene una cita programada para esta fecha y hora."); window.history.back();</script>';
+            exit();
+        }
+    }
+}
+
+// Verificar conflicto de citas del médico
+if ($medico_id && $fecha && $hora) {
+    $query_conflicto_medico = $conectar->prepare(
+        "SELECT * FROM citas WHERE medico = ? AND fecha = ? AND hora = ? AND ID_citas != ?"
+    );
+    $query_conflicto_medico->bind_param("issi", $medico_id, $fecha, $hora, $cita_id);
+    $query_conflicto_medico->execute();
+    $resultado_conflicto_medico = $query_conflicto_medico->get_result();
+
+    if ($resultado_conflicto_medico->num_rows > 0) {
+        echo '<script>alert("El médico ya tiene una cita programada para esta fecha y hora."); window.history.back();</script>';
+        exit();
+    }
+}
+
+// Preparar actualización dinámica
+$campos = [];
+$valores = [];
+
+if ($paciente_id) {
+    $campos[] = "paciente = ?";
+    $valores[] = $paciente_id;
+}
+if ($fecha) {
+    $campos[] = "fecha = ?";
+    $valores[] = $fecha;
+}
+if ($hora) {
+    $campos[] = "hora = ?";
+    $valores[] = $hora;
+}
+if ($medico_id) {
+    $campos[] = "medico = ?";
+    $valores[] = $medico_id;
+}
+
+if (empty($campos)) {
+    echo '<script>alert("No se realizaron cambios en los datos."); window.history.back();</script>';
     exit();
 }
 
-// Verificar si no se ingresaron nuevos datos
-if (empty($fecha) || empty($hora) || empty($especialidad_id) || empty($medico_id)) {
-    echo '<script>alert("Por favor, complete todos los campos para actualizar la cita."); window.history.back();</script>';
-    exit();
-}
+$valores[] = $cita_id;
 
-// Verificar que el CURP ingresado coincida con el del paciente seleccionado
-$consulta_paciente = "SELECT curp FROM pacientes WHERE id_pacientes = '$paciente_id'";
-$resultado_paciente = mysqli_query($conectar, $consulta_paciente);
-$fila_paciente = mysqli_fetch_assoc($resultado_paciente);
+// Generar consulta SQL dinámica
+$sql_update = "UPDATE citas SET " . implode(", ", $campos) . " WHERE ID_citas = ?";
+$stmt_update = $conectar->prepare($sql_update);
+$stmt_update->bind_param(str_repeat("s", count($valores)), ...$valores);
 
-if ($fila_paciente) {
-    $curp_real = $fila_paciente['curp'];
-
-    if ($curp_real !== $curp_formulario) {
-        echo '<script>alert("El CURP ingresado no coincide con el paciente seleccionado."); window.history.back();</script>';
-        exit();
-    }
-
-    // Validar que el paciente NO tenga ya una cita el mismo día y hora
-    $consulta_cita_paciente = "SELECT * FROM citas WHERE curp_paciente = '$curp_real' AND fecha = '$fecha' AND hora = '$hora' AND id_citas != '$cita_id'";
-    $resultado_cita_paciente = mysqli_query($conectar, $consulta_cita_paciente);
-
-    if (mysqli_num_rows($resultado_cita_paciente) > 0) {
-        echo '<script>alert("Usted ya tiene una cita agendada para este día y hora."); window.history.back();</script>';
-        exit();
-    }
-
-    // Validar que el doctor NO tenga cita a la misma fecha y hora
-    $consulta_cita_doctor = "SELECT * FROM citas WHERE medico = '$medico_id' AND fecha = '$fecha' AND hora = '$hora' AND id_citas != '$cita_id'";
-    $resultado_cita_doctor = mysqli_query($conectar, $consulta_cita_doctor);
-
-    if (mysqli_num_rows($resultado_cita_doctor) > 0) {
-        echo '<script>alert("Este doctor ya tiene una cita a esa hora."); window.history.back();</script>';
-        exit();
-    }
-
-    // Todo está bien, actualizar la cita
-    $actualizar_cita = "UPDATE citas SET curp_paciente = '$curp_real', fecha = '$fecha', hora = '$hora', especialidad = '$especialidad_id', medico = '$medico_id' WHERE id_citas = '$cita_id'";
-    $resultado_actualizar = mysqli_query($conectar, $actualizar_cita);
-
-    if ($resultado_actualizar) {
-        echo '<script>alert("La cita se ha actualizado correctamente."); location.href="dashboard_citas.php";</script>';
-    } else {
-        echo '<script>alert("Error al actualizar la cita."); window.history.back();</script>';
-    }
-
+if ($stmt_update->execute()) {
+    echo '<script>alert("La cita se actualizó correctamente."); location.href="dashboard_citas.php";</script>';
 } else {
-    echo '<script>alert("Error: No se encontró el paciente en la base de datos."); window.history.back();</script>';
+    echo '<script>alert("Error al actualizar la cita."); window.history.back();</script>';
 }
-
 exit();
 ?>

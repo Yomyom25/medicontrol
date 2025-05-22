@@ -5,6 +5,52 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gestión de Médicos</title>
   <link rel="stylesheet" href="css/principal.css">
+  <style>
+    .contenedor {
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-box {
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+    }
+
+    button {
+      background-color: #6200ea;
+      color: #fff;
+      font-size: 16px;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #4500b5;
+    }
+  </style>
 </head>
 <body>
   <?php include 'header.php'; ?>
@@ -41,26 +87,48 @@
         <div class="form-group">
           <label>Especialidad:</label>
           <select name="especialidad" required>
-            <option value="">Seleccione...</option>
-            <option value="Cardiología">Cardiología</option>
-            <option value="Dermatología">Dermatología</option>
-            <option value="Pediatría">Pediatría</option>
-            <option value="Neurología">Neurología</option>
-            <option value="Oncología">Oncología</option>
+            <option value="">Seleccione una especialidad...</option>
+            <?php
+              include "conexion.php";
+              $especialidades = "SELECT * FROM especialidades ORDER BY nombre_especialidad ASC";
+              $resultado = mysqli_query($conectar, $especialidades);
+
+              while ($fila = $resultado->fetch_assoc()) {
+                  echo "<option value='{$fila['ID_especialidad']}'>{$fila['nombre_especialidad']}</option>";
+              }
+              mysqli_free_result($resultado);
+            ?>
           </select>
         </div>
-      </div> <!-- Cierre del form-box -->
+
+        <div class="form-group">
+          <label>Usuario:</label>
+          <select name="usuario" required>
+            <option value="">Seleccione un usuario...</option>
+            <?php
+              $usuarios = "SELECT ID_usuario, usuario FROM usuarios";
+              $resultadoUsuarios = mysqli_query($conectar, $usuarios);
+
+              while ($filaUsuario = $resultadoUsuarios->fetch_assoc()) {
+                  echo "<option value='{$filaUsuario['ID_usuario']}'>{$filaUsuario['usuario']}</option>";
+              }
+              mysqli_free_result($resultadoUsuarios);
+            ?>
+          </select>
+        </div>
+      </div>
 
       <button type="submit" class="btn-submit">Registrar Médico</button>
     </form>
   </div>
 
-  <!-- Scripts del código -->
+  <!-- Validaciones -->
   <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      // Ejemplo de validaciones adicionales
+    document.addEventListener("DOMContentLoaded", function () {
       const cedulaInput = document.querySelector('input[name="cedula"]');
-      cedulaInput.addEventListener("input", function() {
+      
+      // Limitar la longitud de la cédula
+      cedulaInput.addEventListener("input", function () {
         if (cedulaInput.value.length > 50) {
           cedulaInput.value = cedulaInput.value.slice(0, 50);
         }
@@ -69,3 +137,4 @@
   </script>
 </body>
 </html>
+
